@@ -165,7 +165,7 @@
 
     <h2>MemeAgent: Catching the Failure From the Logs</h2>
     <p>If misalignment shows up in the BDI trace, a verifier should be able to read the trace and intercept the decision before karma is paid. We give each verifier the selected meme, the agent’s BDI trace, and the subreddit rules, and it returns <code>PASS</code> or <code>BLOCK</code>.</p>
-    <p>Frontier models used zero-shot fall short. We therefore train <b>MemeAgent</b>, a Qwen3-VL-2B model fine-tuned with QLoRA on <b>3,029 examples</b> extracted from the simulation’s own logs. The labels come from the logs themselves with no additional human annotation: a Tier-5 pick is BLOCK and everything else is PASS.</p>
+    <p>Used as zero-shot verifiers, frontier models such as GPT-5.1 catch only a third to half of harmful picks. We therefore train <b>MemeAgent</b>, a Qwen3-VL-2B model fine-tuned with QLoRA on <b>3,029 examples</b> extracted from the simulation’s own logs. The labels come from the logs themselves with no additional human annotation: a Tier-5 pick is BLOCK and everything else is PASS.</p>
     <p class="caption"><b>Table</b>: Verifier performance. Recall and precision are over Tier-5 selections; accuracy is over the full held-out test set.</p>
     <div class="table-scroll">
 <!-- @build:verifier -->
