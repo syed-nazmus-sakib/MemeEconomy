@@ -45,6 +45,7 @@ h2.centered { text-align: center; margin-top: 0; }
 .pub-title { font-size: 2.9rem; line-height: 1.15; margin: 0 auto 22px; max-width: 900px; font-weight: 500; }
 .authors { font-family: "Google Sans", sans-serif; font-size: 1.3rem; margin: 0 0 6px; }
 .authors span { color: var(--link); }
+.authors span, .authors a { white-space: nowrap; }
 .affil { font-family: "Google Sans", sans-serif; font-size: 1.2rem; margin: 0 0 4px; }
 .venue { font-family: "Google Sans", sans-serif; font-size: 1.15rem; color: var(--strong); font-weight: 600; margin: 8px 0 18px; }
 .note { font-family: "Google Sans", sans-serif; font-size: .95rem; margin: 0 0 18px; }
