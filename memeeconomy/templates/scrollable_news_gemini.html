@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News - {{ event_name }}</title>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            height: 100%;
+            /* Minimal styling as the image will represent the entire site content */
+        }
+
+        .browser-mockup {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            min-height: 100vh;
+        }
+
+        .img-container {
+            width: 100%;
+        }
+
+        .img-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .notice {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 4px;
+            font-family: sans-serif;
+            font-size: 14px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="{{ reddit_url }}"
+        style="position: fixed; top: 20px; left: 20px; background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-family: sans-serif; font-weight: bold; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">
+        Go to Reddit Thread &rarr;
+    </a>
+    <div class="browser-mockup">
+        <div class="img-container">
+            <img src="{{ image_url }}" alt="News context for {{ event_name }}">
+        </div>
+    </div>
+    <div class="notice" id="scroll-notice">Scroll to view full page</div>
+
+    <script>
+        // Briefly show a scroll notice if the image is tall
+        window.onload = function () {
+            setTimeout(() => {
+                if (document.body.scrollHeight > window.innerHeight * 1.5) {
+                    const notice = document.getElementById('scroll-notice');
+                    notice.style.opacity = '1';
+                    setTimeout(() => notice.style.opacity = '0', 3000);
+                }
+            }, 500);
+        };
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use MemeEconomy, please cite the paper."
+title: "MemeEconomy: Do LLM Agents Trade Ethics for Survival?"
+type: software
+repository-code: "https://github.com/syed-nazmus-sakib/MemeEconomy"
+url: "https://syed-nazmus-sakib.github.io/MemeEconomy/"
+license: MIT
+authors:
+  - {family-names: Sakib, given-names: Syed Nazmus}
+  - {family-names: Haque, given-names: Nafiul}
+  - {family-names: Manan, given-names: Ahnaf Tahmid}
+  - {family-names: Morshed, given-names: M M Mahabub}
+  - {family-names: Arman, given-names: Shifat E.}
+preferred-citation:
+  type: conference-paper
+  title: "MemeEconomy: Do LLM Agents Trade Ethics for Survival?"
+  collection-title: "Advances in Neural Information Processing Systems"
+  year: 2026
+  authors:
+    - {family-names: Sakib, given-names: Syed Nazmus}
+    - {family-names: Haque, given-names: Nafiul}
+    - {family-names: Manan, given-names: Ahnaf Tahmid}
+    - {family-names: Morshed, given-names: M M Mahabub}
+    - {family-names: Arman, given-names: Shifat E.}
