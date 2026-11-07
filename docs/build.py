@@ -9,7 +9,7 @@ Reads the paper source and the simulation logs, then:
 Every number is parsed from the paper's LaTeX and every demo trace is copied
 verbatim from the run logs, so nothing on the page is retyped by hand.
 
-Usage:  python3 scripts/build.py
+Usage:  python3 docs/build.py
 """
 import html
 import json
@@ -18,11 +18,11 @@ from pathlib import Path
 
 from PIL import Image
 
-SITE = Path(__file__).resolve().parent.parent
-PAPER_DIR = Path("/Volumes/ns_external/Latex/MemeEconomy")
+SITE = Path(__file__).resolve().parent
+PAPER_DIR = Path("/Volumes/ns_external/Research/MemeEconomy/MemeEconomy_Paper")
 PAPER_TEX = PAPER_DIR / "neurips_2026.tex"
 RESEARCH = Path("/Volumes/ns_external/Research/MemeEconomy")
-DATASET = RESEARCH / "instance_and_meme_dataset"
+DATASET = RESEARCH / "memes" / "paper98"
 
 FIG_OUT = SITE / "static/img/figures"
 MEME_OUT = SITE / "static/img/memes"
