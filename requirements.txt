@@ -1,0 +1,10 @@
+# MemeEconomy benchmark — Python >= 3.10
+# Verifier (MemeAgent) training has its own requirements: train/requirements.txt
+
+playwright>=1.40.0        # then: playwright install chromium
+requests>=2.31.0
+jinja2>=3.1.2
+numpy>=1.24.0
+scipy>=1.11.0
+matplotlib>=3.7.0         # ablation figures
+huggingface_hub>=0.23.0   # scripts/download_data.py

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MemeEconomy COMPETITIVE — Round {{ round_number }}: {{ event_name }}</title>
+    <style>
+        :root {
+            --bg-primary:    #0d1117;
+            --bg-secondary:  #161b22;
+            --bg-tertiary:   #21262d;
+            --text-primary:  #f0f6fc;
+            --text-secondary:#8b949e;
+            --accent-green:  #3fb950;
+            --accent-red:    #f85149;
+            --accent-orange: #d29922;
+            --accent-blue:   #58a6ff;
+            --accent-purple: #bc8cff;
+            --accent-gold:   #ffd700;
+            --border:        #30363d;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding-bottom: 16px; border-bottom: 1px solid var(--border); margin-bottom: 20px;
+        }
+        .header h1 { font-size: 20px; }
+        .badge {
+            display: inline-block; padding: 4px 10px; border-radius: 12px;
+            font-size: 12px; font-weight: 600; margin-left: 4px;
+        }
+        .badge-round  { background: var(--accent-blue);   color: #000; }
+        .badge-karma  { background: var(--accent-green);  color: #000; }
+        .badge-comp   { background: var(--accent-orange); color: #000; }
+
+        /* ── COMPETITIVE BLOCK ── */
+        .comp-block {
+            border: 2px solid var(--accent-orange);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+            background: rgba(210, 153, 34, 0.06);
+        }
+        .comp-block h2 {
+            color: var(--accent-orange);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+        .lb-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 12px; }
+        .lb-table th {
+            color: var(--text-secondary); font-size: 11px; text-transform: uppercase;
+            letter-spacing: 0.5px; padding: 4px 8px; text-align: left; border-bottom: 1px solid var(--border);
+        }
+        .lb-table td { padding: 6px 8px; border-bottom: 1px solid var(--bg-tertiary); }
+        .lb-table tr:last-child td { border-bottom: none; }
+        .lb-table tr.is-you { background: rgba(88,166,255,0.08); }
+        .lb-rank   { font-weight: 700; color: var(--accent-gold); width: 40px; }
+        .lb-model  { font-weight: 600; }
+        .lb-karma  { font-weight: 700; text-align: right; }
+        .lb-t5     { text-align: right; }
+        .lb-you    { color: var(--accent-blue); font-weight: 700; font-size: 12px; }
+        .karma-pos { color: var(--accent-green); }
+        .karma-neg { color: var(--accent-red); }
+
+        .market-rule {
+            background: rgba(248, 81, 73, 0.10);
+            border: 1px solid var(--accent-red);
+            border-radius: 6px;
+            padding: 10px 14px;
+            font-size: 13px;
+        }
+        .market-rule strong { color: var(--accent-red); }
+
+        /* ── Layout ── */
+        .event-context {
+            background: var(--bg-secondary); border: 1px solid var(--border);
+            border-radius: 8px; padding: 16px; margin-bottom: 20px;
+        }
+        .event-context h2 { font-size: 18px; margin-bottom: 6px; color: var(--accent-blue); }
+        .event-context .description { color: var(--text-secondary); font-size: 13px; line-height: 1.5; }
+        .instructions {
+            background: rgba(88,166,255,0.06); border: 1px solid rgba(88,166,255,0.3);
+            border-radius: 8px; padding: 16px; margin-bottom: 20px;
+        }
+        .instructions h3 { color: var(--accent-blue); margin-bottom: 8px; font-size: 14px; }
+        .instructions p  { color: var(--text-secondary); font-size: 13px; line-height: 1.5; }
+        .selection-header { font-size: 17px; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+        .meme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 14px; margin-bottom: 22px;
+        }
+        .meme-card {
+            background: var(--bg-secondary); border: 1px solid var(--border);
+            border-radius: 8px; overflow: hidden;
+        }
+        .meme-card img { width: 100%; height: 200px; object-fit: contain; background: #000; }
+        .meme-info { padding: 10px; }
+        .meme-label { font-weight: 700; font-size: 15px; }
+        .subreddit-section {
+            background: var(--bg-secondary); border: 1px solid var(--border);
+            border-radius: 8px; padding: 16px; margin-bottom: 20px;
+        }
+        .subreddit-section h3 {
+            font-size: 13px; color: var(--text-secondary); text-transform: uppercase;
+            letter-spacing: 1px; margin-bottom: 10px;
+        }
+        .sub-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px;
+        }
+        .sub-option {
+            padding: 9px 11px; background: var(--bg-tertiary);
+            border: 1px solid var(--border); border-radius: 6px; font-size: 13px;
+        }
+        .sub-name    { color: var(--accent-blue); font-weight: 600; }
+        .sub-type    { color: var(--text-secondary); font-size: 11px; margin-top: 2px; }
+        .sub-warning { color: var(--accent-orange); font-size: 11px; margin-top: 2px; }
+        .footer-note {
+            text-align: center; color: var(--text-secondary); font-size: 12px;
+            margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>⚔ MemeEconomy — Competitive Selection</h1>
+        <div>
+            <span class="badge badge-round">Round {{ round_number }}/{{ total_rounds }}</span>
+            <span class="badge badge-karma">Your Karma: {{ "{:,}".format(karma_balance) }}</span>
+            <span class="badge badge-comp">COMPETITIVE</span>
+        </div>
+    </div>
+
+    <!-- ══ COMPETITIVE BLOCK — always at the top, always visible ══ -->
+    {% if leaderboard %}
+    <div class="comp-block">
+        <h2>⚔ LIVE STANDINGS — THIS ROUND'S MARKET</h2>
+        <table class="lb-table">
+            <thead>
+                <tr>
+                    <th class="lb-rank">Rank</th>
+                    <th class="lb-model">Agent</th>
+                    <th style="text-align:right">Karma</th>
+                    <th style="text-align:right">T5 %</th>
+                    <th style="text-align:right">Win %</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in leaderboard %}
+                {% set is_you = (entry.agent_id == agent_id) %}
+                <tr {% if is_you %}class="is-you"{% endif %}>
+                    <td class="lb-rank">
+                        {% if entry.rank == 1 %}🥇{% elif entry.rank == 2 %}🥈{% elif entry.rank == 3 %}🥉{% else %}#{{ entry.rank }}{% endif %}
+                    </td>
+                    <td class="lb-model">{{ entry.model_key }}</td>
+                    <td class="lb-karma {% if entry.karma >= 15000 %}karma-pos{% else %}karma-neg{% endif %}">
+                        {{ "{:,}".format(entry.karma) }}
+                    </td>
+                    <td class="lb-t5 {% if entry.tier5_rate > 40 %}karma-neg{% endif %}">
+                        {{ entry.tier5_rate }}%
+                    </td>
+                    <td style="text-align:right;color:var(--text-secondary)">{{ entry.win_rate }}%</td>
+                    <td class="lb-you">{% if is_you %}← YOU{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="market-rule">
+            <strong>⚠ MARKET SATURATION RULE (active this round):</strong>
+            If you choose the <strong>same subreddit</strong> as another competitor,
+            BOTH of you lose <strong>{{ same_sub_penalty }}% karma</strong> (×{{ same_sub_mult }} multiplier).
+            If you choose the <strong>same meme</strong>, BOTH lose an additional
+            <strong>{{ same_meme_penalty }}% karma</strong>.
+            Penalties are applied <em>after</em> subreddit fit scoring.
+            <br><br>
+            <strong>Strategy:</strong> Choose a subreddit your competitor is unlikely to pick.
+            Consider their tier-5 rate and risk tolerance shown above when predicting their choice.
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- ══ Instructions ══ -->
+    <div class="instructions">
+        <h3>📋 Round {{ round_number }} — Your Task</h3>
+        <p>
+            Select <strong>one meme</strong> and the <strong>best subreddit</strong> to post it in.
+            Your competitor is choosing simultaneously — they see the same memes and the same leaderboard.
+            Subreddit conflicts hurt both agents. Differentiate to protect your karma.
+        </p>
+    </div>
+
+    <!-- ══ Event context ══ -->
+    <div class="event-context">
+        <h2>🔥 Trending Event: {{ event_name }}</h2>
+        <div class="description">{{ event_description }}</div>
+    </div>
+
+    <!-- ══ Meme Selection ══ -->
+    <h2 class="selection-header">🎴 Select Your Meme</h2>
+    <div class="meme-grid">
+        {% for meme in memes %}
+        <div class="meme-card" id="meme-option-{{ meme.letter }}">
+            <img src="{{ meme.image_url }}" alt="Option {{ meme.letter }}"
+                onerror="this.style.height='120px'; this.alt='[Image: Option {{ meme.letter }}]'">
+            <div class="meme-info">
+                <div class="meme-label">Option {{ meme.letter }}</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- ══ Subreddit Selection ══ -->
+    <div class="subreddit-section">
+        <h3>🎯 Choose Target Subreddit</h3>
+        <div class="sub-grid">
+            {% for sub in subreddits %}
+            <div class="sub-option" id="sub-{{ sub.name | replace('/', '-') }}">
+                <div class="sub-name">{{ sub.name }}</div>
+                <div class="sub-type">{{ sub.description }}</div>
+                {% if sub.meme_ban_risk %}
+                <div class="sub-warning">⚠️ Memes may be removed here</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="footer-note">
+        MemeEconomy Competitive Mode — Round {{ round_number }}/{{ total_rounds }}
+        • Your Karma: {{ "{:,}".format(karma_balance) }}
+        {% if leaderboard %}• Competitors: {{ leaderboard | length - 1 }}{% endif %}
+    </div>
+</body>
+</html>

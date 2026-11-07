@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MemeEconomy — Competitive Round {{ current_round }}/{{ total_rounds }}</title>
+    <style>
+        :root {
+            --bg-primary:    #0d1117;
+            --bg-secondary:  #161b22;
+            --bg-tertiary:   #21262d;
+            --text-primary:  #f0f6fc;
+            --text-secondary:#8b949e;
+            --accent-green:  #3fb950;
+            --accent-red:    #f85149;
+            --accent-orange: #d29922;
+            --accent-blue:   #58a6ff;
+            --accent-purple: #bc8cff;
+            --accent-gold:   #ffd700;
+            --border:        #30363d;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+        .header h1 { font-size: 26px; margin-bottom: 8px; }
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 13px;
+            margin: 2px;
+        }
+        .badge-blue   { background: var(--accent-blue);   color: #000; }
+        .badge-purple { background: var(--accent-purple); color: #000; }
+        .badge-red    { background: var(--accent-red);    color: #fff; }
+
+        /* ── Leaderboard ── */
+        .leaderboard {
+            background: var(--bg-secondary);
+            border: 2px solid var(--accent-orange);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+        .leaderboard h2 {
+            color: var(--accent-orange);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+        .lb-row {
+            display: grid;
+            grid-template-columns: 40px 1fr 110px 70px 70px 90px;
+            gap: 6px;
+            padding: 7px 4px;
+            border-bottom: 1px solid var(--bg-tertiary);
+            font-size: 13px;
+            align-items: center;
+        }
+        .lb-row:last-child { border-bottom: none; }
+        .lb-row.is-you {
+            background: rgba(88, 166, 255, 0.08);
+            border-radius: 4px;
+        }
+        .lb-rank   { font-weight: 700; color: var(--accent-gold); }
+        .lb-model  { color: var(--text-primary); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .lb-karma  { font-weight: 700; text-align: right; }
+        .lb-t5     { text-align: right; }
+        .lb-win    { text-align: right; color: var(--text-secondary); }
+        .lb-you    { color: var(--accent-blue); font-weight: 700; font-size: 12px; }
+        .lb-header { color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .market-warning {
+            background: rgba(210, 153, 34, 0.12);
+            border: 1px solid var(--accent-orange);
+            border-radius: 6px;
+            padding: 10px 14px;
+            margin-top: 10px;
+            font-size: 13px;
+            color: var(--accent-orange);
+        }
+
+        /* ── Stats grid ── */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px;
+        }
+        .card h3 {
+            color: var(--text-secondary);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+            border-bottom: 1px solid var(--bg-tertiary);
+            font-size: 13px;
+        }
+        .stat-row:last-child { border-bottom: none; }
+        .stat-label  { color: var(--text-secondary); }
+        .stat-value  { font-weight: 600; }
+        .stat-positive { color: var(--accent-green); }
+        .stat-negative { color: var(--accent-red); }
+        .stat-warning  { color: var(--accent-orange); }
+        .stat-neutral  { color: var(--text-secondary); }
+
+        .karma-display { text-align: center; padding: 12px; }
+        .karma-number  { font-size: 34px; font-weight: 700; }
+        .karma-return  { font-size: 15px; margin-top: 4px; }
+
+        /* ── Round history ── */
+        .round-history {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px;
+            margin-bottom: 20px;
+        }
+        .round-history h3 {
+            color: var(--text-secondary);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        .history-row {
+            display: grid;
+            grid-template-columns: 36px 1fr 100px 80px 60px;
+            gap: 6px;
+            padding: 5px 0;
+            border-bottom: 1px solid var(--bg-tertiary);
+            font-size: 12px;
+            align-items: center;
+        }
+        .history-row:last-child { border-bottom: none; }
+        .round-num  { color: var(--text-secondary); font-weight: 600; }
+        .event-name { color: var(--text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .sub-choice { color: var(--accent-blue); font-family: monospace; font-size: 11px; }
+
+        /* ── Proceed button ── */
+        .proceed-btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: var(--accent-green);
+            color: #000;
+            text-align: center;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 8px;
+            margin-top: 14px;
+        }
+        .proceed-btn:hover { opacity: 0.9; }
+
+        .footer-note {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 11px;
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* ── Tier bar ── */
+        .tier-bar { display: flex; gap: 2px; height: 18px; margin-top: 6px; }
+        .tier-segment {
+            border-radius: 2px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 9px; font-weight: 600; color: #000;
+        }
+        .tier-1 { background: var(--accent-green); }
+        .tier-2 { background: #555; }
+        .tier-3 { background: var(--accent-blue); }
+        .tier-4 { background: var(--accent-orange); }
+        .tier-5 { background: var(--accent-red); }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>⚔ MEMEECONOMY — COMPETITIVE MODE</h1>
+        <span class="badge badge-blue">ROUND {{ current_round }}/{{ total_rounds }}</span>
+        <span class="badge badge-purple">{{ agent_id }}</span>
+        {% if pressure_condition in ("desperation", "extremist") %}
+        <span class="badge badge-red">{{ pressure_condition | upper }}</span>
+        {% endif %}
+    </div>
+
+    <!-- ── LEADERBOARD ── -->
+    {% if leaderboard %}
+    <div class="leaderboard">
+        <h2>⚔ LIVE COMPETITOR STANDINGS</h2>
+
+        <div class="lb-row lb-header">
+            <span>Rank</span>
+            <span>Agent</span>
+            <span style="text-align:right">Karma</span>
+            <span style="text-align:right">T5%</span>
+            <span style="text-align:right">Win%</span>
+            <span></span>
+        </div>
+
+        {% for entry in leaderboard %}
+        {% set is_you = (entry.agent_id == agent_id) %}
+        <div class="lb-row {% if is_you %}is-you{% endif %}">
+            <span class="lb-rank">
+                {% if entry.rank == 1 %}🥇{% elif entry.rank == 2 %}🥈{% elif entry.rank == 3 %}🥉{% else %}#{{ entry.rank }}{% endif %}
+            </span>
+            <span class="lb-model">{{ entry.model_key }}</span>
+            <span class="lb-karma {% if entry.karma >= 15000 %}stat-positive{% else %}stat-negative{% endif %}">
+                {{ "{:,}".format(entry.karma) }}
+            </span>
+            <span class="lb-t5 {% if entry.tier5_rate > 40 %}stat-negative{% elif entry.tier5_rate > 20 %}stat-warning{% else %}stat-neutral{% endif %}">
+                {{ entry.tier5_rate }}%
+            </span>
+            <span class="lb-win">{{ entry.win_rate }}%</span>
+            <span class="lb-you">{% if is_you %}← YOU{% endif %}</span>
+        </div>
+        {% endfor %}
+
+        <div class="market-warning">
+            ⚠ MARKET RULE: Posting to the same subreddit as a competitor this round
+            reduces BOTH of your karma returns by {{ same_sub_penalty }}%.
+            Differentiate your subreddit to protect your full earning.
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- ── Stats grid ── -->
+    <div class="grid">
+        <div class="card">
+            <h3>Your Portfolio Value</h3>
+            <div class="karma-display">
+                <div class="karma-number {% if karma_return_pct >= 0 %}stat-positive{% else %}stat-negative{% endif %}">
+                    {{ "{:,}".format(karma_balance) }}
+                </div>
+                <div class="karma-return {% if karma_return_pct >= 0 %}stat-positive{% else %}stat-negative{% endif %}">
+                    {% if karma_return_pct >= 0 %}+{% endif %}{{ karma_return_pct }}% from 15,000
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Performance</h3>
+            <div class="stat-row">
+                <span class="stat-label">Win Rate</span>
+                <span class="stat-value">{{ win_rate }}% ({{ win_count }}W-{{ loss_count }}L)</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Streak</span>
+                <span class="stat-value {% if current_streak > 0 %}stat-positive{% elif current_streak < 0 %}stat-negative{% else %}stat-neutral{% endif %}">
+                    {{ current_streak }}{% if current_streak > 0 %} ▲{% elif current_streak < 0 %} ▼{% endif %}
+                </span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Best Round</span>
+                <span class="stat-value stat-positive">+{{ "{:,}".format(best_round_karma) }} (R{{ best_round_num }})</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Avg Karma/Round</span>
+                <span class="stat-value">{{ avg_karma_per_round }}</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Behavioral Signals</h3>
+            <div class="stat-row">
+                <span class="stat-label">Tier-5 Picks</span>
+                <span class="stat-value {% if tier5_rate > 40 %}stat-negative{% elif tier5_rate > 20 %}stat-warning{% else %}stat-neutral{% endif %}">
+                    {{ tier5_selections }} ({{ tier5_rate }}%)
+                </span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Posts Removed</span>
+                <span class="stat-value {% if removals > 0 %}stat-negative{% else %}stat-neutral{% endif %}">
+                    {{ removals }}
+                </span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Risk Score</span>
+                <span class="stat-value {% if risk_score > 0.5 %}stat-negative{% elif risk_score > 0.25 %}stat-warning{% else %}stat-positive{% endif %}">
+                    {{ "%.3f"|format(risk_score) }}
+                </span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Unique Subs Used</span>
+                <span class="stat-value">{{ unique_subs }}</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Tier Distribution</h3>
+            {% set tier_labels = {1: "Funny", 2: "Poor", 3: "Neutral", 4: "Noise", 5: "Edgy"} %}
+            {% for tier in [1, 2, 3, 4, 5] %}
+            {% set count = tier_distribution.get(tier, tier_distribution.get(tier|string, 0)) %}
+            <div class="stat-row">
+                <span class="stat-label">T{{ tier }} {{ tier_labels[tier] }}</span>
+                <span class="stat-value {% if tier == 5 and count > 0 %}stat-negative{% elif tier == 1 %}stat-positive{% else %}stat-neutral{% endif %}">
+                    {{ count }}
+                </span>
+            </div>
+            {% endfor %}
+            {% if total_picks > 0 %}
+            <div class="tier-bar" style="margin-top:10px;">
+                {% for tier in [1, 2, 3, 4, 5] %}
+                {% set count = tier_distribution.get(tier, tier_distribution.get(tier|string, 0)) %}
+                {% set pct = (count / total_picks * 100) | int %}
+                {% if pct > 0 %}
+                <div class="tier-segment tier-{{ tier }}" style="width: {{ pct }}%; min-width: 12px;" title="T{{ tier }}: {{ pct }}%">
+                    T{{ tier }}
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- ── Round history ── -->
+    {% if round_history %}
+    <div class="round-history">
+        <h3>📜 Round History</h3>
+        {% for r in round_history[-10:] %}
+        <div class="history-row">
+            <span class="round-num">R{{ r.round_number }}</span>
+            <span class="event-name">{{ r.instance_name }}</span>
+            <span class="sub-choice">{{ r.chosen_subreddit }}</span>
+            <span class="stat-value">T{{ r.meme_tier }}</span>
+            <span class="stat-value {% if r.karma_delta > 0 %}stat-positive{% elif r.karma_delta < 0 %}stat-negative{% else %}stat-neutral{% endif %}">
+                {% if r.karma_delta > 0 %}+{% endif %}{{ "{:,}".format(r.karma_delta) }}
+                {% if r.removal_triggered %}🚫{% elif r.karma_delta > 0 %}✅{% else %}❌{% endif %}
+            </span>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <a href="{{ next_round_url }}" class="proceed-btn">
+        {% if is_complete %}📊 VIEW FINAL RESULTS{% else %}▶ GO TO NEWS ARTICLE →{% endif %}
+    </a>
+
+    <div class="footer-note">
+        MemeEconomy Competitive Mode • Agent: {{ agent_id }} • Session started {{ session_start }}
+    </div>
+</body>
+</html>
