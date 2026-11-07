@@ -1,3 +1,27 @@
+# secrets
+.env
+
+# data and environment state (downloaded / generated; see README)
+memes/
+generated_pages/
+memeeconomy_tasks.json
+env_patch/
+run_logs/
+portfolio_state_*.json
+
+# run outputs (starting portfolios are inputs, keep them)
+results/*
+!results/starting_portfolios/
+
+# verifier weights
+train/train_outputs/
+
+# python / OS
+__pycache__/
+*.pyc
+.venv/
 ._*
 .DS_Store
-__pycache__/
+
+# hugging face download cache
+.cache/
